@@ -1,1 +1,1 @@
-# campus_life_assistantce_app
+# campus_life_assistance_app
