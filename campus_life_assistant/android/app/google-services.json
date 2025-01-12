@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746189740344",
+    "project_id": "campus-life-app-svivsj",
+    "storage_bucket": "campus-life-app-svivsj.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746189740344:android:b84990ebc94bcf3192c9cd",
+        "android_client_info": {
+          "package_name": "com.mycompany.campuslifeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmxQiT4D07wx41Nu9P-8R9mmT2vhghg64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
