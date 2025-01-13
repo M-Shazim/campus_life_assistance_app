@@ -92,11 +92,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : LoginPageWidget(),
         ),
         FFRoute(
-          name: 'HomePage',
-          path: '/homePage',
-          builder: (context, params) => HomePageWidget(),
-        ),
-        FFRoute(
           name: 'LoginPage',
           path: '/loginPage',
           builder: (context, params) => LoginPageWidget(),
@@ -110,6 +105,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'AppHomePage',
           path: '/appHomePage',
           builder: (context, params) => AppHomePageWidget(),
+        ),
+        FFRoute(
+          name: 'scheduledClasses',
+          path: '/scheduledClasses',
+          builder: (context, params) => ScheduledClassesWidget(),
+        ),
+        FFRoute(
+          name: 'editClasses',
+          path: '/editClasses',
+          builder: (context, params) => EditClassesWidget(
+            classUID: params.getParam(
+              'classUID',
+              ParamType.int,
+            ),
+            subjectREF: params.getParam(
+              'subjectREF',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'addClass',
+          path: '/addClass',
+          builder: (context, params) => AddClassWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
