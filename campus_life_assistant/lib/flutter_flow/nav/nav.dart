@@ -129,6 +129,51 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'addClass',
           path: '/addClass',
           builder: (context, params) => AddClassWidget(),
+        ),
+        FFRoute(
+          name: 'assignments',
+          path: '/assignments',
+          builder: (context, params) => AssignmentsWidget(),
+        ),
+        FFRoute(
+          name: 'addAssignment',
+          path: '/addAssignment',
+          builder: (context, params) => AddAssignmentWidget(),
+        ),
+        FFRoute(
+          name: 'editAssignment',
+          path: '/editAssignment',
+          builder: (context, params) => EditAssignmentWidget(
+            titleREF: params.getParam(
+              'titleREF',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'editProfile',
+          path: '/editProfile',
+          builder: (context, params) => EditProfileWidget(
+            uidREF: params.getParam(
+              'uidREF',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'feedback',
+          path: '/feedback',
+          builder: (context, params) => FeedbackWidget(),
+        ),
+        FFRoute(
+          name: 'addFeedback',
+          path: '/addFeedback',
+          builder: (context, params) => AddFeedbackWidget(
+            uidREF: params.getParam(
+              'uidREF',
+              ParamType.String,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

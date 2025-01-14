@@ -443,10 +443,8 @@ class _SignupPageWidgetState extends State<SignupPageWidget> {
                                   await UserRecord.collection
                                       .doc(user.uid)
                                       .update(createUserRecordData(
-                                        email: (_model.signupemailFocusNode
-                                                    ?.hasFocus ??
-                                                false)
-                                            .toString(),
+                                        email: _model
+                                            .signupemailTextController.text,
                                         password: _model
                                             .signuppasswordTextController.text,
                                         displayName: _model

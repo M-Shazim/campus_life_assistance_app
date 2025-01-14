@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -55,7 +56,7 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                 height: MediaQuery.sizeOf(context).height * 1.0,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF1A237E), Color(0xFF3949AB)],
+                    colors: [Color(0xFF7E1A1A), Color(0xFF3949AB)],
                     stops: [0.0, 1.0],
                     begin: AlignmentDirectional(0.0, -1.0),
                     end: AlignmentDirectional(0, 1.0),
@@ -91,52 +92,20 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                 ),
-                                StreamBuilder<List<UserRecord>>(
-                                  stream: queryUserRecord(
-                                    singleRecord: true,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                            ),
-                                          ),
+                                AuthUserStreamWidget(
+                                  builder: (context) => Text(
+                                    valueOrDefault<String>(
+                                      currentUserDisplayName,
+                                      'Guest',
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall
+                                        .override(
+                                          fontFamily: 'Inter Tight',
+                                          color: Color(0xFFE0E0E0),
+                                          letterSpacing: 0.0,
                                         ),
-                                      );
-                                    }
-                                    List<UserRecord> textUserRecordList =
-                                        snapshot.data!;
-                                    // Return an empty Container when the item does not exist.
-                                    if (snapshot.data!.isEmpty) {
-                                      return Container();
-                                    }
-                                    final textUserRecord =
-                                        textUserRecordList.isNotEmpty
-                                            ? textUserRecordList.first
-                                            : null;
-
-                                    return Text(
-                                      valueOrDefault<String>(
-                                        textUserRecord?.displayName,
-                                        'Guest',
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .headlineSmall
-                                          .override(
-                                            fontFamily: 'Inter Tight',
-                                            color: Color(0xFFE0E0E0),
-                                            letterSpacing: 0.0,
-                                          ),
-                                    );
-                                  },
+                                  ),
                                 ),
                               ],
                             ),
@@ -147,31 +116,25 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                 color: Color(0x33FFFFFF),
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
-                              child: InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  GoRouter.of(context).prepareAuthEvent();
-                                  await authManager.signOut();
-                                  GoRouter.of(context).clearRedirectLocation();
-
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 1000));
-
-                                  context.pushNamedAuth(
-                                      'LoginPage', context.mounted);
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  child: Image.network(
-                                    'https://images.unsplash.com/photo-1575995872537-3793d29d972c?w=500&h=500',
-                                    width: 50.0,
-                                    height: 50.0,
-                                    fit: BoxFit.cover,
-                                  ),
+                              child: FlutterFlowIconButton(
+                                borderRadius: 8.0,
+                                buttonSize: 40.0,
+                                icon: Icon(
+                                  Icons.person,
+                                  color: FlutterFlowTheme.of(context).tertiary,
+                                  size: 24.0,
                                 ),
+                                onPressed: () async {
+                                  context.pushNamed(
+                                    'editProfile',
+                                    queryParameters: {
+                                      'uidREF': serializeParam(
+                                        currentUserUid,
+                                        ParamType.String,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                },
                               ),
                             ),
                           ],
@@ -228,42 +191,53 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16.0, 16.0, 16.0, 16.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 60.0,
-                                              height: 60.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFE3F2FD),
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context
+                                                .pushNamed('scheduledClasses');
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 60.0,
+                                                height: 60.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFE3F2FD),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.calendar_today,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  size: 30.0,
+                                                ),
                                               ),
-                                              child: Icon(
-                                                Icons.calendar_today,
-                                                color:
+                                              Text(
+                                                'Class Schedule',
+                                                style:
                                                     FlutterFlowTheme.of(context)
-                                                        .primary,
-                                                size: 30.0,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Class Schedule',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(height: 12.0)),
+                                            ].divide(SizedBox(height: 12.0)),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -277,40 +251,50 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16.0, 16.0, 16.0, 16.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 60.0,
-                                              height: 60.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFFFF3E0),
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.goNamed('assignments');
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 60.0,
+                                                height: 60.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFFFF3E0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.assignment,
+                                                  color: Colors.orange,
+                                                  size: 30.0,
+                                                ),
                                               ),
-                                              child: Icon(
-                                                Icons.assignment,
-                                                color: Colors.orange,
-                                                size: 30.0,
+                                              Text(
+                                                'Assignments',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Assignments',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(height: 12.0)),
+                                            ].divide(SizedBox(height: 12.0)),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -324,40 +308,67 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16.0, 16.0, 16.0, 16.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 60.0,
-                                              height: 60.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFE8F5E9),
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Not Yet Implemented due to paid plans of Firebase',
+                                                  style: TextStyle(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                  ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
                                               ),
-                                              child: Icon(
-                                                Icons.group,
-                                                color: Colors.green,
-                                                size: 30.0,
+                                            );
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 60.0,
+                                                height: 60.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFE8F5E9),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.group,
+                                                  color: Colors.green,
+                                                  size: 30.0,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Study Groups',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(height: 12.0)),
+                                              Text(
+                                                'Study Groups',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                              ),
+                                            ].divide(SizedBox(height: 12.0)),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -371,40 +382,50 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16.0, 16.0, 16.0, 16.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 60.0,
-                                              height: 60.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFFCE4EC),
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.goNamed('feedback');
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 60.0,
+                                                height: 60.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFFCE4EC),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.feedback,
+                                                  color: Color(0xFFE91E63),
+                                                  size: 30.0,
+                                                ),
                                               ),
-                                              child: Icon(
-                                                Icons.feedback,
-                                                color: Color(0xFFE91E63),
-                                                size: 30.0,
+                                              Text(
+                                                'Feedback',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Feedback',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(height: 12.0)),
+                                            ].divide(SizedBox(height: 12.0)),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -446,193 +467,125 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                             fontFamily: 'Inter Tight',
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
+                                            fontSize: 20.0,
                                             letterSpacing: 0.0,
                                           ),
                                     ),
-                                    Text(
-                                      'View All',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Inter',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            letterSpacing: 0.0,
-                                          ),
-                                    ),
+
                                   ],
                                 ),
-                                Container(
-                                  width: MediaQuery.sizeOf(context).width * 1.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 16.0, 16.0, 16.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Row(
+                                StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('classes')
+                                      .where('time', isGreaterThanOrEqualTo: DateTime.now()) // Filter for classes that are coming up after now
+                                      .where('time', isLessThanOrEqualTo: DateTime.now().add(Duration(hours: 1))) // Filter for classes within the next 1 hour
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    }
+
+                                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                                      return Center(child: Text('No upcoming classes.'));
+                                    }
+
+                                    final upcomingClasses = snapshot.data!.docs.map((doc) {
+                                      final classTime = (doc['time'] as Timestamp).toDate();
+                                      return {
+                                        'subject': doc['subject'],
+                                        'time': classTime,
+                                        'room': doc['room'],
+                                        'day': doc['day'],
+                                      };
+                                    }).toList();
+
+                                    return ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: upcomingClasses.length,
+                                      itemBuilder: (context, index) {
+                                        final classInfo = upcomingClasses[index];
+                                        return Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Column(
+                                            Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  'Mathematics 101',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyLarge
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                                Container(
+                                                  width: 48.0,
+                                                  height: 48.0,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(context).accent3,
+                                                    borderRadius: BorderRadius.circular(24.0),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.school,
+                                                    color: FlutterFlowTheme.of(context).tertiary,
+                                                    size: 24.0,
+                                                  ),
                                                 ),
-                                                Text(
-                                                  'Prof. Robert Smith',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
+                                                SizedBox(width: 16.0), // Add space between the icon and the text
+                                                Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      classInfo['subject'],
+                                                      style: FlutterFlowTheme.of(context)
+                                                          .bodyLarge
+                                                          .override(
                                                         fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
                                                         letterSpacing: 0.0,
                                                       ),
+                                                    ),
+                                                    Text(
+                                                      'Room: ${classInfo['room']} • ${classInfo['day']}  \nDue at ${classInfo['time'].toString()}',
+                                                      style: FlutterFlowTheme.of(context)
+                                                          .bodySmall
+                                                          .override(
+                                                        fontFamily: 'Inter',
+                                                        color: FlutterFlowTheme.of(context).secondaryText,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
+                                            SizedBox(width: 16.0), // Add space between the row and the "Due Soon" container
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Color(0xFFE3F2FD),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
+                                                color: FlutterFlowTheme.of(context).primary,
+                                                borderRadius: BorderRadius.circular(6.0),
                                               ),
                                               child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        8.0, 12.0, 8.0, 12.0),
+                                                padding: EdgeInsets.all(4.0),
                                                 child: Text(
-                                                  '9:00 AM',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
+                                                  'Soon',
+                                                  style: FlutterFlowTheme.of(context)
                                                       .bodySmall
                                                       .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                        letterSpacing: 0.0,
-                                                      ),
+                                                    fontFamily: 'Inter',
+                                                    color: Colors.white,
+                                                    letterSpacing: 0.0,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ].divide(SizedBox(height: 12.0)),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.sizeOf(context).width * 1.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 16.0, 16.0, 16.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Physics Lab',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyLarge
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  'Prof. Emily Johnson',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFFE3F2FD),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        8.0, 12.0, 8.0, 12.0),
-                                                child: Text(
-                                                  '11:30 AM',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodySmall
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ].divide(SizedBox(height: 12.0)),
-                                    ),
-                                  ),
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ].divide(SizedBox(height: 16.0)),
                             ),
                           ),
                         ),
-                      ),
+                      ), //upcoming classes
                       Material(
                         color: Colors.transparent,
                         elevation: 4.0,
@@ -657,134 +610,134 @@ class _AppHomePageWidgetState extends State<AppHomePageWidget> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Recent Notifications',
+                                      'Upcoming Assignments',
                                       style: FlutterFlowTheme.of(context)
                                           .headlineSmall
                                           .override(
                                             fontFamily: 'Inter Tight',
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
+                                            fontSize: 20.0,
                                             letterSpacing: 0.0,
                                           ),
                                     ),
-                                    Text(
-                                      'View All',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Inter',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            letterSpacing: 0.0,
-                                          ),
-                                    ),
+
                                   ],
                                 ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFFFF3E0),
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                      ),
-                                      child: Icon(
-                                        Icons.assignment_turned_in,
-                                        color: Colors.orange,
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Assignment Graded',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyLarge
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w600,
+                                StreamBuilder<QuerySnapshot>(
+
+                                  stream: FirebaseFirestore.instance
+                                      .collection('assignments')
+                                  // .where('duedate', isGreaterThanOrEqualTo: DateTime.now()) // Filter for assignments that are due after or now
+                                      .where('duedate', isLessThan: DateTime.now().add(Duration(hours: 1))) // Filter for assignments that are due within the next 1 hour
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    }
+
+                                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                                      return Center(child: Text('No overdue assignments.'));
+                                    }
+
+                                    final upcomingAssignments = snapshot.data!.docs.map((doc) {
+                                      final dueDate = (doc['duedate'] as Timestamp).toDate();
+                                      return {
+                                        'title': doc['title'],
+                                        'description': doc['description'],
+                                        'duedate': dueDate,
+                                      };
+                                    }).toList();
+
+                                    return ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: upcomingAssignments.length,
+                                      itemBuilder: (context, index) {
+                                        final assignment = upcomingAssignments[index];
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Container(
+                                                  width: 48.0,
+                                                  height: 48.0,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(context).accent3,
+                                                    borderRadius: BorderRadius.circular(24.0),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.description,
+                                                    color: FlutterFlowTheme.of(context).tertiary,
+                                                    size: 24.0,
+                                                  ),
                                                 ),
-                                          ),
-                                          Text(
-                                            'Your Physics homework has been graded',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  letterSpacing: 0.0,
+                                                SizedBox(width: 16.0), // Add space between the icon and the text
+                                                Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      assignment['title'],
+                                                      style: FlutterFlowTheme.of(context)
+                                                          .bodyLarge
+                                                          .override(
+                                                        fontFamily: 'Inter',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Due at ${assignment['duedate']}',
+                                                      style: FlutterFlowTheme.of(context)
+                                                          .bodySmall
+                                                          .override(
+                                                        fontFamily: 'Inter',
+                                                        color: FlutterFlowTheme.of(context)
+                                                            .secondaryText,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ].divide(SizedBox(width: 16.0)),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFE8F5E9),
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                      ),
-                                      child: Icon(
-                                        Icons.group_add,
-                                        color: Colors.green,
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'New Study Group',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyLarge
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w600,
+                                              ],
+                                            ),
+                                            SizedBox(width: 16.0), // Add space between the row and the "Overdue" container
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: FlutterFlowTheme.of(context).primary,
+                                                borderRadius: BorderRadius.circular(6.0),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(4.0),
+                                                child: Text(
+                                                  'Soon',
+                                                  style: FlutterFlowTheme.of(context)
+                                                      .bodySmall
+                                                      .override(
+                                                    fontFamily: 'Inter',
+                                                    color: Colors.white,
+                                                    letterSpacing: 0.0,
+                                                  ),
                                                 ),
-                                          ),
-                                          Text(
-                                            'You\'ve been added to Mathematics study group',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ].divide(SizedBox(width: 16.0)),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ].divide(SizedBox(height: 16.0)),
                             ),
                           ),
                         ),
-                      ),
+                      ), //upcoming assignments
+
                     ].divide(SizedBox(height: 24.0)),
                   ),
                 ),
