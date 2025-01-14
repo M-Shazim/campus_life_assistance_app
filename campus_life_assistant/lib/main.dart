@@ -30,6 +30,8 @@ void backgroundTask(String taskId) async {
 
 void startBackgroundFetch() {
   // Configure the background fetch
+  print("background fetch plugin running");
+
   BackgroundFetch.configure(
     BackgroundFetchConfig(
       minimumFetchInterval: 15, // Check every 15 minutes
@@ -42,7 +44,8 @@ void startBackgroundFetch() {
 }
 
 void startDueDateCheckTimer() {
-  Timer.periodic(Duration(minutes: 15), (timer) {
+  Timer.periodic(Duration(minutes: 1), (timer) {
+    print("Check timer running");
     checkForDueAssignments();
     checkForDueClasses(); // Check for due assignments every 15 minutes
   });
@@ -56,9 +59,12 @@ Future<void> checkForDueAssignments() async {
 
   for (var assignment in assignments.docs) {
     final dueDate = (assignment['duedate'] as Timestamp).toDate();
+    print("Check for overdueAssignments running before notification");
 
     // If the due date is near (e.g., within the next hour)
     if (dueDate.isBefore(dueDateThreshold)) {
+      print("Check for overdueAssignments running after notification");
+
       final title = assignment['title'];
       showNotification('Assignment Due Soon', '$title is due soon!');
     }
@@ -97,7 +103,7 @@ Future<void> initializeNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-Future<void> showNotification(String title, String body, {String? day}) async {
+Future<void> showNotification(String title, String body) async {
   const androidDetails = AndroidNotificationDetails(
     'channel_id', // A unique channel ID
     'Channel Name',
@@ -109,11 +115,6 @@ Future<void> showNotification(String title, String body, {String? day}) async {
   const notificationDetails = NotificationDetails(android: androidDetails);
 
   // Construct a modified message based on optional parameters
-  String fullBody = body;
-
-  if (day != null) {
-    fullBody += '\nDay: $day';
-  }
 
   await flutterLocalNotificationsPlugin.show(
     0, // Notification ID
